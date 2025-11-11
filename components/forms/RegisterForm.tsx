@@ -187,17 +187,70 @@ const RegisterForm = ({ user }: { user: User }) => {
           >
             {Doctors.map((doctor) => (
               <SelectItem key={doctor.name} value={doctor.name}>
-                <Image
-                  src={doctor.image}
-                  width={32}
-                  height={32}
-                  alt={doctor.name}
-                  className="rounded-full border-dark-500"
-                />
-                <p>{doctor.name}</p>
+                <div className="flex cursor-pointer items-center gap-2">
+                  <Image
+                    src={doctor.image}
+                    width={32}
+                    height={32}
+                    alt={doctor.name}
+                    className="rounded-full border border-dark-500"
+                  />
+                  <p>{doctor.name}</p>
+                </div>
               </SelectItem>
             ))}
           </CustomFormField>
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.INPUT}
+            name="insuranceProvider"
+            label="Insurance Provider"
+            placeholder="BlueCross BlueShield"
+          />
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.SELECT}
+            name="insurancePolicyNumber"
+            label="Insurance policy number"
+            placeholder="DCE80867"
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.TEXTAREA}
+            name="allergies"
+            label="Allergies"
+            placeholder="Peanuts, Penicillin, Pollen"
+          />
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.TEXTAREA}
+            name="currentMedication"
+            label="Current Medication (if any)"
+            placeholder="Ibuprofen"
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.TEXTAREA}
+            name="familyMedicalHistory"
+            label="Family Medical History"
+            placeholder="Mother: Diabetes, Father: Hypertension"
+          />
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.TEXTAREA}
+            name="pastMedicalHistory"
+            label="Past medical history"
+            placeholder="Appendectomy in 2015"
+          />
         </div>
 
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
