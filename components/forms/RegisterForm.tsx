@@ -14,9 +14,10 @@ import { UserFormValidation } from "@/lib/validation";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import { createUser } from "@/lib/actions/patient.actions";
-import { Gender, Doctors } from "@/constants";
+import { Gender, Doctors, IdentificationTypes } from "@/constants";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
+import FileUploader from "../FileUploader";
 
 export enum FormFieldType {
   INPUT = "imput",
@@ -115,24 +116,11 @@ const RegisterForm = ({ user }: { user: User }) => {
           <CustomFormField
             control={form.control}
             fieldType={FormFieldType.SKELETON}
-            name="gender"
-            label="Gender"
+            name="identificationDocument"
+            label="Scanned copy of identification document"
             renderSkeleton={(field) => (
               <FormControl>
-                <RadioGroup
-                  className="flex h-11 gap-6 xl:justify-between"
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  {Gender.map((option) => (
-                    <div key={option} className="radio-group">
-                      <RadioGroupItem id={option} value={option} />
-                      <Label htmlFor={option} className="cursor-pointer">
-                        {option}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+                <FileUploader files={field.value} onChange={field.onChange} />
               </FormControl>
             )}
           />
@@ -250,6 +238,48 @@ const RegisterForm = ({ user }: { user: User }) => {
             name="pastMedicalHistory"
             label="Past medical history"
             placeholder="Appendectomy in 2015"
+          />
+        </div>
+
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">Identification & Verification</h2>
+          </div>
+        </section>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.SELECT}
+            name="identificationType"
+            label="Identification Type"
+            placeholder="Select an identification type"
+          >
+            {IdentificationTypes.map((type) => (
+              <SelectItem key={type} value={type}>
+                {type}
+              </SelectItem>
+            ))}
+          </CustomFormField>
+
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.INPUT}
+            name="identificationNumber"
+            label="Identification Number"
+            placeholder="67483967"
+          />
+
+          <CustomFormField
+            control={form.control}
+            fieldType={FormFieldType.SKELETON}
+            name="identificationDocument"
+            label="Scanned copy of identification document"
+            renderSkeleton={(field) => (
+              <FormControl>
+                <FileUploader files={field.value} onChange={field.onChange} />
+              </FormControl>
+            )}
           />
         </div>
 
