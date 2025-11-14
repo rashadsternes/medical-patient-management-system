@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl } from "@/components/ui/form";
 import { PatientFormValidation } from "@/lib/validation";
 import { registerPatient } from "@/lib/actions/patient.actions";
 
 import { Gender, Doctors, IdentificationTypes } from "@/constants";
+import { Form, FormControl } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
 import CustomFormField from "../CustomFormField";
@@ -40,7 +41,7 @@ const RegisterForm = ({ user }: { user: User }) => {
   });
 
   const onSubmit = async function (values: z.infer<typeof PatientFormValidation>) {
-    console.log('Form submitted!', values);
+    console.log("Form submitted!", values);
     setIsLoading(true);
 
     let formData: FormData | undefined;
@@ -55,10 +56,29 @@ const RegisterForm = ({ user }: { user: User }) => {
     }
     try {
       const patientData = {
-        ...values,
         userId: user.$id,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
         birthDate: new Date(values.birthDate),
-        identificationDocument: formData,
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergencyContactName: values.emergencyContactName,
+        emergencyContactNumber: values.emergencyContactNumber,
+        primaryPhysician: values.primaryPhysician,
+        insuranceProvider: values.insuranceProvider,
+        insurancePolicyNumber: values.insurancePolicyNumber,
+        allergies: values.allergies,
+        currentMedication: values.currentMedication,
+        familyMedicalHistory: values.familyMedicalHistory,
+        pastMedicalHistory: values.pastMedicalHistory,
+        identificationType: values.identificationType,
+        identificationNumber: values.identificationNumber,
+        identificationDocument: values.identificationDocument ? formData : undefined,
+        treatmentConsent: values.privacyConsent,
+        disclosureConsent: values.privacyConsent,
+        privacyConsent: values.privacyConsent,
       };
       const patient = await registerPatient(patientData);
 
@@ -118,14 +138,28 @@ const RegisterForm = ({ user }: { user: User }) => {
             name="birthDate"
             label="Date of Birth"
           />
+
           <CustomFormField
             control={form.control}
             fieldType={FormFieldType.SKELETON}
-            name="identificationDocument"
-            label="Scanned copy of identification document"
+            name="gender"
+            label="Gender"
             renderSkeleton={(field) => (
               <FormControl>
-                <FileUploader files={field.value} onChange={field.onChange} />
+                <RadioGroup
+                  className="flex h-11 gap-6 xl-justify-between"
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  {Gender.map((gender, ind) => (
+                    <div key={gender + ind} className="radio-group">
+                      <RadioGroupItem value={gender} id={gender} />
+                      <Label htmlFor={gender} className="cursor-pointer">
+                        {gender}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </FormControl>
             )}
           />
@@ -315,7 +349,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           label="I acknowledge that I have read and understood the privacy practices regarding my personal and medical information."
         />
 
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
       </form>
     </Form>
   );
