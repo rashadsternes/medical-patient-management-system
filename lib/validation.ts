@@ -1,27 +1,23 @@
 import { z } from "zod";
 
 export const UserFormValidation = z.object({
-  username: z
+  name: z
     .string()
-    .min(2, "Username must be at least 2 characters long")
-    .max(50, "Username must be at most 50 characters long"),
+    .min(2, "Name must be at least 2 characters long")
+    .max(50, "Name must be at most 50 characters long"),
   email: z.string().email("Invalid email address"),
-  phone: z
-    .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+  phone: z.string().refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
 
 export const PatientFormValidation = z.object({
-  username: z
+  name: z
     .string()
     .min(2, "Name must be at least 2 characters")
     .max(50, "Name must be at most 50 characters"),
   email: z.string().email("Invalid email address"),
-  phone: z
-    .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+  phone: z.string().refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
   birthDate: z.coerce.date(),
-  gender: z.enum(["Male", "Female", "Other"]),
+  gender: z.enum(["Male", "Female"]),
   address: z
     .string()
     .min(5, "Address must be at least 5 characters")
