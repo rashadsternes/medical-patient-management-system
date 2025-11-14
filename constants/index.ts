@@ -1,8 +1,6 @@
-export const Gender = ["Male", "Female", "Prefer not to say"];
+export const Gender = ["Male", "Female"];
 
 export const PatientFormDefaultValues = {
-  firstName: "",
-  lastName: "",
   email: "",
   phone: "",
   birthDate: new Date(Date.now()),
