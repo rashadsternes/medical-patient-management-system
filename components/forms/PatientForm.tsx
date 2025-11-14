@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
 
 export enum FormFieldType {
-  INPUT = "imput",
+  INPUT = "input",
   TEXTAREA = "textarea",
   PHONE_INPUT = "phoneInput",
   CHECKBOX = "checkbox",
@@ -29,21 +29,21 @@ const PatientForm = () => {
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       phone: "",
     },
   });
 
   const onSubmit = async function ({
-    username,
+    name,
     email,
     phone,
   }: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
 
     try {
-      const userData = { username, email, phone };
+      const userData = { name, email, phone };
       const user = await createUser(userData);
       if (user) {
         console.log(user, "created user");
@@ -64,7 +64,7 @@ const PatientForm = () => {
         <CustomFormField
           control={form.control}
           fieldType={FormFieldType.INPUT}
-          name="username"
+          name="name"
           label="Fullname"
           placeholder="Juan Smith"
           iconSrc="/assets/icons/user.svg"
