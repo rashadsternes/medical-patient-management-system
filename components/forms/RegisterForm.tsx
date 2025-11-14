@@ -1,26 +1,24 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { UserFormValidation } from "@/lib/validation";
-import CustomFormField from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { createUser } from "@/lib/actions/patient.actions";
+import { PatientFormValidation } from "@/lib/validation";
+import { registerPatient } from "@/lib/actions/patient.actions";
+
 import { Gender, Doctors, IdentificationTypes } from "@/constants";
 import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
+import CustomFormField from "../CustomFormField";
+import SubmitButton from "../SubmitButton";
 import FileUploader from "../FileUploader";
 
 export enum FormFieldType {
-  INPUT = "imput",
+  INPUT = "input",
   TEXTAREA = "textarea",
   PHONE_INPUT = "phoneInput",
   CHECKBOX = "checkbox",
@@ -32,29 +30,39 @@ export enum FormFieldType {
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof UserFormValidation>>({
-    resolver: zodResolver(UserFormValidation),
+  const form = useForm<z.infer<typeof PatientFormValidation>>({
+    resolver: zodResolver(PatientFormValidation),
     defaultValues: {
-      username: "",
-      email: "",
-      phone: "",
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
     },
   });
 
-  const onSubmit = async function ({
-    username,
-    email,
-    phone,
-  }: z.infer<typeof UserFormValidation>) {
+  const onSubmit = async function (values: z.infer<typeof PatientFormValidation>) {
+    console.log('Form submitted!', values);
     setIsLoading(true);
 
+    let formData: FormData | undefined;
+
+    if (values.identificationDocument && values.identificationDocument.length > 0) {
+      const blobFile = new Blob([values.identificationDocument[0]], {
+        type: values.identificationDocument[0].type,
+      });
+      formData = new FormData();
+      formData.append("blobFile", blobFile);
+      formData.append("fileName", values.identificationDocument[0].name);
+    }
     try {
-      const userData = { username, email, phone };
-      const user = await createUser(userData);
-      if (user) {
-        console.log(user, "created user");
-        router.push(`/patients/${user.$id}/register`);
-      }
+      const patientData = {
+        ...values,
+        userId: user.$id,
+        birthDate: new Date(values.birthDate),
+        identificationDocument: formData,
+      };
+      const patient = await registerPatient(patientData);
+
+      if (patient) router.push(`/patients/${user.$id}/new-appointment`);
     } catch (error) {
       console.log(error);
     }
@@ -62,10 +70,7 @@ const RegisterForm = ({ user }: { user: User }) => {
   };
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex-1 space-y-12"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-12">
         <section className="space-y-4">
           <h1 className="header">Welcome</h1>
           <p className="text-dark-700">Let us know more about yourself.</p>
@@ -80,7 +85,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         <CustomFormField
           control={form.control}
           fieldType={FormFieldType.INPUT}
-          name="username"
+          name="name"
           label="Fullname"
           placeholder="Juan Smith"
           iconSrc="/assets/icons/user.svg"
@@ -136,7 +141,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           />
           <CustomFormField
             control={form.control}
-            fieldType={FormFieldType.SELECT}
+            fieldType={FormFieldType.INPUT}
             name="occupation"
             label="Occupation"
             placeholder="Software Engineer"
@@ -146,7 +151,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           <CustomFormField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="emergencyContact"
+            name="emergencyContactName"
             label="Emergency Contact Name"
             placeholder="Emergency Contact"
           />
@@ -200,7 +205,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           />
           <CustomFormField
             control={form.control}
-            fieldType={FormFieldType.SELECT}
+            fieldType={FormFieldType.INPUT}
             name="insurancePolicyNumber"
             label="Insurance policy number"
             placeholder="DCE80867"
