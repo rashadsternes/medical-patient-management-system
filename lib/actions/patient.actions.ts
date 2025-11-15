@@ -16,13 +16,7 @@ import { InputFile } from "node-appwrite";
 
 export const createUser = async (user: CreateUserParams) => {
   try {
-    const newUser = await users.create(
-      ID.unique(),
-      user.email,
-      user.phone,
-      undefined,
-      user.name
-    );
+    const newUser = await users.create(ID.unique(), user.email, user.phone, undefined, user.name);
 
     return parseStringify(newUser);
   } catch (error: any) {
@@ -39,6 +33,17 @@ export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
     return parseStringify(user);
+  } catch (error) {
+    console.error("An error occurred while fetching the user:", error);
+  }
+};
+
+export const getPatient = async (userId: string) => {
+  try {
+    const patients = await databases.listDocuments(DATABASE_ID!, PATIENT_TABLE_ID!, [
+      Query.equal("userId", userId),
+    ]);
+    return parseStringify(patients.documents[0]);
   } catch (error) {
     console.error("An error occurred while fetching the user:", error);
   }
