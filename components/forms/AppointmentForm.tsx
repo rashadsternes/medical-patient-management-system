@@ -58,11 +58,8 @@ const AppointmentForm = ({
         break;
     }
 
-    console.log("BEFORE THE TYPE", type);
-
     try {
       if (type === "create" && patientId) {
-        console.log("I'm Here'");
         const appointmentData = {
           userId,
           patient: patientId,
@@ -74,8 +71,6 @@ const AppointmentForm = ({
         };
 
         const appointment = await createAppointment(appointmentData);
-
-        console.log(appointment);
 
         if (appointment) {
           form.reset();
