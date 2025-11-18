@@ -1,8 +1,16 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { Button } from "@/components/ui/button";
+import { getAppointment } from "@/lib/actions/appointment.actions";
+import { Doctors } from "@/constants";
+import { formatDateTime } from "@/lib/utils";
 
-const Success = () => {
+const Success = async ({ params: { userId }, searchParams }: SearchParamProps) => {
+  const appointmentId = (searchParams?.appointmentId as string) || "";
+  const appointment = await getAppointment(appointmentId);
+
+  const doctor = Doctors.find((doc) => doc.name === appointment.primaryPhysician);
   return (
     <div className="flex h-screen max-h-screen px-[5%]">
       <div className="success-img">
@@ -24,6 +32,23 @@ const Success = () => {
           </h2>
           <p>We will be in touch shortly to confirm.</p>
         </section>
+        <section className="request-details">
+          <p>Requested appointment details:</p>
+          <div className="flex items-center gap-3">
+            <Image src={doctor?.image!} alt="doctor" width={24} height={24} />
+            <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+            <div className="flex gap-2">
+              <Image src="/assets/icons/calendar.svg" height={24} width={24} alt="calendar" />
+              <p>{formatDateTime(appointment.schedule).dateTime}</p>
+            </div>
+          </div>
+        </section>
+
+        <Button variant="outline" className="shad-primary-btn" asChild>
+          <Link href={`/patients/${userId}/new-appointment`}>New Appointment</Link>
+        </Button>
+
+        <p className="copyright">© 2025 CarePulse</p>
       </div>
     </div>
   );
