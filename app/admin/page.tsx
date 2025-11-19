@@ -2,9 +2,102 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import StatCard from "@/components/StatCard";
+import { DataTable } from "@/components/table/DataTable";
+import { columns, Payment } from "@/components/table/columns";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
 
+async function getData(): Promise<Payment[]> {
+  return [
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+  ];
+}
+
 const Admin = async () => {
+  const data = await getData();
+
   const appointments = await getRecentAppointmentList();
 
   return (
@@ -47,6 +140,9 @@ const Admin = async () => {
             icon="/assets/icons/cancelled.svg"
           />
         </section>
+
+        {/* <DataTable columns={columns} data={appointments.documents} /> */}
+        <DataTable columns={columns} data={data} />
       </main>
     </div>
   );
