@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { getAppointment } from "@/lib/actions/appointment.actions";
 import { Doctors } from "@/constants";
 import { formatDateTime } from "@/lib/utils";
+import type { SearchParamProps } from "@/types";
 
 const Success = async ({ params: { userId }, searchParams }: SearchParamProps) => {
   const appointmentId = (searchParams?.appointmentId as string) || "";
