@@ -4,6 +4,8 @@ import { databases, DATABASE_ID, APPOINTMENT_TABLE_ID } from "@/lib/appwrite.con
 import { ID, Query } from "node-appwrite";
 import { parseStringify } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
+import { revalidatePath } from "next/cache";
+import type { CreateAppointmentParams, UpdateAppointmentParams } from "@/types";
 
 export const createAppointment = async (appointment: CreateAppointmentParams) => {
   try {
