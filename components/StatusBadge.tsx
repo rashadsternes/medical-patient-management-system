@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { StatusIcon } from "@/constants";
+import type { Status } from "@/types";
 
 const StatusBadge = ({ status }: { status: Status }) => {
   return (

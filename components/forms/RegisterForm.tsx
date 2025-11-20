@@ -17,6 +17,7 @@ import { SelectItem } from "../ui/select";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
 import FileUploader from "../FileUploader";
+import type { User } from "@/types";
 
 export enum FormFieldType {
   INPUT = "input",
