@@ -1,10 +1,12 @@
+import type { Gender as GenderType } from "@/types";
+
 export const Gender = ["Male", "Female"];
 
 export const PatientFormDefaultValues = {
   email: "",
   phone: "",
   birthDate: new Date(Date.now()),
-  gender: "Male" as Gender,
+  gender: "Male" as GenderType,
   address: "",
   occupation: "",
   emergencyContactName: "",
