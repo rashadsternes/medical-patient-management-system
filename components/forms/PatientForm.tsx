@@ -4,9 +4,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { UserFormValidation } from "@/lib/validation";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../SubmitButton";
@@ -35,11 +33,7 @@ const PatientForm = () => {
     },
   });
 
-  const onSubmit = async function ({
-    name,
-    email,
-    phone,
-  }: z.infer<typeof UserFormValidation>) {
+  const onSubmit = async function ({ name, email, phone }: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
 
     try {
