@@ -38,7 +38,7 @@ const AppointmentForm = ({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
       primaryPhysician: appointment && appointment.primaryPhysician,
-      schedule: appointment ? new Date(appointment.schedule) : new Date(),
+      schedule: appointment ? new Date(appointment.schedule) : new Date(Date.now()),
       reason: appointment ? appointment.reason : "",
       note: appointment ? appointment.note : "",
       cancellationReason: appointment?.cancellationReason ?? "",
@@ -103,7 +103,9 @@ const AppointmentForm = ({
     } catch (error) {
       console.error("Appointment submission error:", error);
       alert(
-        `Failed to ${type === "create" ? "create" : type} appointment. Please try again or contact support if the issue persists.`
+        `Failed to ${
+          type === "create" ? "create" : type
+        } appointment. Please try again or contact support if the issue persists.`
       );
     }
     setIsLoading(false);
