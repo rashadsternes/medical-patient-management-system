@@ -77,8 +77,8 @@ const RegisterForm = ({ user }: { user: User }) => {
         identificationType: values.identificationType,
         identificationNumber: values.identificationNumber,
         identificationDocument: values.identificationDocument ? formData : undefined,
-        treatmentConsent: values.privacyConsent,
-        disclosureConsent: values.privacyConsent,
+        treatmentConsent: values.treatmentConsent,
+        disclosureConsent: values.disclosureConsent,
         privacyConsent: values.privacyConsent,
       };
       const patient = await registerPatient(patientData);
