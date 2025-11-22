@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
+import * as Sentry from "@sentry/nextjs";
 
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -10,10 +11,15 @@ const fontSans = Plus_Jakarta_Sans({
   variable: "--font-sans",
 });
 
-export const metadata: Metadata = {
-  title: "CarePulse",
-  description: "A healthcare management system",
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: "CarePulse",
+    description: "A healthcare management system",
+    other: {
+      ...Sentry.getTraceData(),
+    },
+  };
+}
 
 export default function RootLayout({
   children,
@@ -21,19 +27,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          "min-h-screen bg-dark-300 font-sans antialiased",
-          fontSans.variable
-        )}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn("min-h-screen bg-dark-300 font-sans antialiased", fontSans.variable)}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </body>
