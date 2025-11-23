@@ -2,7 +2,7 @@
 
 import { databases, DATABASE_ID, APPOINTMENT_TABLE_ID, messaging } from "@/lib/appwrite.config";
 import { ID, Query } from "node-appwrite";
-import { parseStringify } from "@/lib/utils";
+import { parseStringify, formatDateTime } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
 import { revalidatePath } from "next/cache";
 import type { CreateAppointmentParams, UpdateAppointmentParams } from "@/types";
@@ -98,6 +98,16 @@ export const updateAppointment = async ({
     if (!updatedAppointment) {
       throw new Error("Appointment not found");
     }
+
+    const smsMessage = `
+      Hi, it's CarePulse.
+      ${
+        type === "schedule"
+          ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!)}`
+          : `We regret to inform that your appointment for has been cancelled for the
+      following reason: ${appointment.cancellationReason}`
+      }`;
+    await sendSMSNotification(userId, smsMessage);
 
     revalidatePath("/admin");
     return parseStringify(updatedAppointment);
