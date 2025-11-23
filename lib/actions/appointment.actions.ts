@@ -103,7 +103,9 @@ export const updateAppointment = async ({
       Hi, it's CarePulse.
       ${
         type === "schedule"
-          ? `Your appointment has been scheduled for ${formatDateTime(appointment.schedule!)}`
+          ? `Your appointment has been scheduled for 
+          ${formatDateTime(appointment.schedule!).dateTime}
+          with Dr. ${appointment.primaryPhysician}.`
           : `We regret to inform that your appointment for has been cancelled for the
       following reason: ${appointment.cancellationReason}`
       }`;
