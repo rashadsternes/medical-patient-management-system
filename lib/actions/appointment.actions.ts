@@ -1,6 +1,6 @@
 "use server";
 
-import { databases, DATABASE_ID, APPOINTMENT_TABLE_ID } from "@/lib/appwrite.config";
+import { databases, DATABASE_ID, APPOINTMENT_TABLE_ID, messaging } from "@/lib/appwrite.config";
 import { ID, Query } from "node-appwrite";
 import { parseStringify } from "@/lib/utils";
 import { Appointment } from "@/types/appwrite.types";
@@ -71,6 +71,16 @@ export const getRecentAppointmentList = async () => {
   }
 };
 
+export const sendSMSNotification = async (userId: string, content: string) => {
+  try {
+    const message = await messaging.createSms(ID.unique(), content, [], [userId]);
+
+    return parseStringify(message);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateAppointment = async ({
   appointmentId,
   userId,
@@ -88,8 +98,6 @@ export const updateAppointment = async ({
     if (!updatedAppointment) {
       throw new Error("Appointment not found");
     }
-
-    // TODO SMS notification
 
     revalidatePath("/admin");
     return parseStringify(updatedAppointment);
